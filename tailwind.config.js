@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ["class"],
@@ -13,6 +14,11 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+				textPrimary: 'var(--text-primary)',
+				textSecondary: 'var(--text-secondary)',
+				textLight: 'var(--text-light)',
+				textHover: 'var(--text-hover)',
+
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
