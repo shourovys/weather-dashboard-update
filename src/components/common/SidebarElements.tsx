@@ -84,7 +84,7 @@ const SidebarMenuLink: React.FC<{
     <Link
       data-sidebar='menu-button'
       className={cn(
-        'flex flex-col items-center gap-0.5 text-textSecondary md:hover:bg-textHover rounded-xl md:p-2 text-xs md:text-sm font-bold transform transition-all duration-200 ease-in-out w-full',
+        'flex flex-col items-center gap-0.5 text-textSecondary md:hover:bg-accent hover:text-accent-foreground rounded-xl md:p-2 text-xs md:text-sm font-bold transform transition-all duration-200 ease-in-out w-full',
         location.pathname === to && 'text-textPrimary font-bold',
         className
       )}
