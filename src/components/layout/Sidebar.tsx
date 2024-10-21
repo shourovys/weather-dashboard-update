@@ -1,4 +1,10 @@
-import { CloudSunRain, Logs, Map, SlidersHorizontal, User } from 'lucide-react';
+import {
+  CityIcon,
+  MapIcon,
+  ProfileIcon,
+  SettingsIcon,
+  WeatherIcon,
+} from '@/utils/icons';
 
 import {
   SidebarContainer,
@@ -12,22 +18,22 @@ const items = [
   {
     title: 'Weather',
     url: '/',
-    icon: CloudSunRain,
+    icon: WeatherIcon,
   },
   {
     title: 'City',
     url: '/saved-cities',
-    icon: Logs,
+    icon: CityIcon,
   },
   {
     title: 'Map',
     url: '/map',
-    icon: Map,
+    icon: MapIcon,
   },
   {
     title: 'Settings',
     url: '/settings',
-    icon: SlidersHorizontal,
+    icon: SettingsIcon,
   },
 ];
 
@@ -46,7 +52,7 @@ export function Sidebar() {
         ))}
         <SidebarMenuItem className=' md:hidden'>
           <SidebarMenuLink to={'/profile'}>
-            <User className='h-6 w-6 md:h-8 md:w-8' />
+            <ProfileIcon className='h-6 w-6 md:h-8 md:w-8' />
             <span>Profile</span>
           </SidebarMenuLink>
         </SidebarMenuItem>
