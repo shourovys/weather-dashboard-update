@@ -1,3 +1,5 @@
+import { LOCATION_API_BASE_URL } from '@/api/urls';
+import { sendGetRequest } from '@/utils/sendGetRequest';
 import { useEffect, useState } from 'react';
 
 interface ILocation {
@@ -56,34 +58,30 @@ export function useLocationSearch(query: string, isFocused: boolean) {
     setIsLoading(true);
     const fetchLocations = async () => {
       try {
-        const response = await fetch(
-          `https://api.locationiq.com/v1/autocomplete.php?key=pk.552392fcd200643704d4e21dac1c5d12&q=${query}&limit=5&format=json`
+        const response = await sendGetRequest<ILocation[]>(
+          LOCATION_API_BASE_URL(query)
         );
-        const data = await response.json();
-        if (response.ok) {
-          // Remove duplicates based on 'place_id'
-          const uniqueLocations = data.reduce(
-            (acc: ILocation[], item: ILocation) => {
-              if (!acc.some((i) => i.place_id === item.place_id)) {
-                acc.push(item);
-              }
-              return acc;
-            },
-            []
-          );
 
-          setLocations(
-            uniqueLocations.map((item: ILocation) => ({
-              display_name: item?.display_name || '',
-              place_id: item?.place_id || '',
-              lat: item?.lat || '',
-              lon: item?.lon || '',
-            }))
-          );
-          setError(null);
-        } else {
-          setError(data.error || 'Something went wrong.');
-        }
+        // Remove duplicates based on 'place_id'
+        const uniqueLocations = response.reduce(
+          (acc: ILocation[], item: ILocation) => {
+            if (!acc.some((i) => i.place_id === item.place_id)) {
+              acc.push(item);
+            }
+            return acc;
+          },
+          []
+        );
+
+        setLocations(
+          uniqueLocations.map((item: ILocation) => ({
+            display_name: item?.display_name || '',
+            place_id: item?.place_id || '',
+            lat: item?.lat || '',
+            lon: item?.lon || '',
+          }))
+        );
+        setError(null);
       } catch (err) {
         console.error('🚀 ~ fetchLocations ~ err:', err);
         setError('Failed to fetch locations.');
