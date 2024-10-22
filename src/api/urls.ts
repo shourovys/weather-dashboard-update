@@ -1,4 +1,4 @@
-import { LOCATIONIQ_API_KEY, WEATHER_API_KEY } from '@/utils/config.ts';
+import { LOCATIONIQ_API_KEY, WEATHER_API_KEY } from '@/config/config.ts';
 
 export const LOCATION_API_BASE_URL = (query: string) =>
   `https://api.locationiq.com/v1/autocomplete.php?key=${LOCATIONIQ_API_KEY}&q=${query}&limit=5&format=json`;
