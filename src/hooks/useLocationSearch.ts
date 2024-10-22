@@ -1,4 +1,5 @@
 import { LOCATION_API_BASE_URL } from '@/api/urls';
+import { getUniqueData } from '@/utils/getUniqueLocations';
 import { sendGetRequest } from '@/utils/sendGetRequest';
 import { useEffect, useState } from 'react';
 
@@ -62,25 +63,10 @@ export function useLocationSearch(query: string, isFocused: boolean) {
           LOCATION_API_BASE_URL(query)
         );
 
-        // Remove duplicates based on 'place_id'
-        const uniqueLocations = response.reduce(
-          (acc: ILocation[], item: ILocation) => {
-            if (!acc.some((i) => i.place_id === item.place_id)) {
-              acc.push(item);
-            }
-            return acc;
-          },
-          []
-        );
+        // Use the utility function to remove duplicates
+        const uniqueLocations = getUniqueData(response, 'place_id');
 
-        setLocations(
-          uniqueLocations.map((item: ILocation) => ({
-            display_name: item?.display_name || '',
-            place_id: item?.place_id || '',
-            lat: item?.lat || '',
-            lon: item?.lon || '',
-          }))
-        );
+        setLocations(uniqueLocations);
         setError(null);
       } catch (err) {
         console.error('🚀 ~ fetchLocations ~ err:', err);

@@ -1,5 +1,7 @@
 import { useDebounce } from '@/hooks/useDebounce';
 import { useLocationSearch } from '@/hooks/useLocationSearch';
+import { useWeather } from '@/hooks/useWeather';
+import { ILocation } from '@/types/weather';
 import { useState } from 'react';
 import {
   Command,
@@ -11,6 +13,7 @@ import {
 } from '../common/CommandElement';
 
 function SearchLocation() {
+  const { setLocation } = useWeather();
   const [debouncedQuery, query, setQuery] = useDebounce<string>('', 1000);
   const [inputFocused, setInputFocused] = useState(false);
 
@@ -19,8 +22,9 @@ function SearchLocation() {
     inputFocused
   );
 
-  const handleSelectLocation = (locationName: string) => {
-    setQuery(locationName);
+  const handleSelectLocation = (location: ILocation) => {
+    setLocation(location);
+    setQuery(location.display_name);
     setInputFocused(false);
   };
 
@@ -30,7 +34,7 @@ function SearchLocation() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => setInputFocused(true)}
-        onBlur={() => setTimeout(() => setInputFocused(false), 200)}
+        // onBlur={() => setTimeout(() => setInputFocused(false), 200)}
         placeholder='Search for a location...'
       />
 
@@ -47,8 +51,8 @@ function SearchLocation() {
               {locations.map((location) => (
                 <CommandItem key={location.place_id}>
                   <span
-                    className='cursor-pointer w-full'
-                    onClick={() => handleSelectLocation(location.display_name)}
+                    className='cursor-pointer w-full h-full px-2 py-1.5 '
+                    onClick={() => handleSelectLocation(location)}
                   >
                     {location.display_name}
                   </span>
