@@ -1,11 +1,5 @@
-import {
-  CityIcon,
-  MapIcon,
-  ProfileIcon,
-  SettingsIcon,
-  WeatherIcon,
-} from '@/utils/icons';
-
+import MENU_ROUTES from '@/routes/menu';
+import ROUTES, { getRoutesArray } from '@/routes/routes';
 import {
   SidebarContainer,
   SidebarLogo,
@@ -14,46 +8,26 @@ import {
   SidebarMenuLink,
 } from '../common/SidebarElements';
 
-const items = [
-  {
-    title: 'Weather',
-    url: '/',
-    icon: WeatherIcon,
-  },
-  {
-    title: 'City',
-    url: '/saved-cities',
-    icon: CityIcon,
-  },
-  {
-    title: 'Map',
-    url: '/map',
-    icon: MapIcon,
-  },
-  {
-    title: 'Settings',
-    url: '/settings',
-    icon: SettingsIcon,
-  },
-];
-
 export function Sidebar() {
+  const menuRoutes = getRoutesArray(MENU_ROUTES);
+
+  const { label, path, icon: Icon } = ROUTES.profile;
   return (
     <SidebarContainer>
       <SidebarLogo className='mb-14 hidden md:block' />
       <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuLink to={item.url}>
-              <item.icon className='h-6 w-6 md:h-8 md:w-8' />
-              <span>{item.title}</span>
+        {menuRoutes.map((item) => (
+          <SidebarMenuItem key={item.key}>
+            <SidebarMenuLink to={item.path}>
+              {item.icon && <item.icon className='h-6 w-6 md:h-8 md:w-8' />}
+              <span>{item?.label}</span>
             </SidebarMenuLink>
           </SidebarMenuItem>
         ))}
         <SidebarMenuItem className=' md:hidden'>
-          <SidebarMenuLink to={'/profile'}>
-            <ProfileIcon className='h-6 w-6 md:h-8 md:w-8' />
-            <span>Profile</span>
+          <SidebarMenuLink to={path}>
+            {Icon && <Icon className='h-6 w-6 md:h-8 md:w-8' />}
+            <span>{label}</span>
           </SidebarMenuLink>
         </SidebarMenuItem>
       </SidebarMenu>

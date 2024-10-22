@@ -16,3 +16,5 @@ export const ProfileIcon = User;
 
 export const CommandIcon = Command;
 export const SearchIcon = MagnifyingGlassIcon;
+
+export type IconType = typeof WeatherIcon;
