@@ -6,9 +6,10 @@ export enum AUTH_STATUS {
 }
 
 export interface IUser {
-  id: number;
+  id: string;
   name: string;
   email: string;
+  picture: string;
 }
 
 export interface IAuthState {
