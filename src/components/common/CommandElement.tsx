@@ -23,12 +23,12 @@ const CommandInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement>
 >(({ className, ...props }, ref) => (
-  <div className='flex items-center px-3' cmdk-input-wrapper=''>
+  <div className='flex items-center px-3 w-full' cmdk-input-wrapper=''>
     <SearchIcon className='mr-2 h-6 w-6 shrink-0 text-textPrimary' />
     <input
       ref={ref}
       className={cn(
-        'flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none font-semibold placeholder:text-textSecondary disabled:cursor-not-allowed disabled:opacity-50',
+        'flex h-12 w-full rounded-xl bg-transparent py-3 text-sm outline-none font-semibold placeholder:text-textSecondary disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
       {...props}
@@ -36,7 +36,24 @@ const CommandInput = React.forwardRef<
   </div>
 ));
 
-CommandInput.displayName = CommandPrimitive.Input.displayName;
+const CommandButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  return (
+    <button
+      ref={ref}
+      type={props.type || 'button'} // Default to "button" if no type is provided
+      className={cn(
+        'flex h-12 rounded-xl bg-transparent py-3 px-5 text-sm font-semibold hover:bg-textHover disabled:hover:bg-transparent outline-none disabled:cursor-default disabled:opacity-50',
+        className
+      )}
+      {...props} // Spreading the rest of the props to allow flexibility
+    />
+  );
+});
+
+CommandButton.displayName = 'CommandButton';
 
 const CommandList = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.List>,
@@ -101,6 +118,7 @@ CommandItem.displayName = CommandPrimitive.Item.displayName;
 
 export {
   Command,
+  CommandButton,
   CommandEmpty,
   CommandGroup,
   CommandInput,

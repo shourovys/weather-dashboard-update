@@ -11,6 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from '../common/CommandElement';
+import SaveLocation from './SaveLocation';
 
 function SearchLocation() {
   const { setLocation } = useWeather();
@@ -30,13 +31,16 @@ function SearchLocation() {
 
   return (
     <Command className=''>
-      <CommandInput
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onFocus={() => setInputFocused(true)}
-        // onBlur={() => setTimeout(() => setInputFocused(false), 200)}
-        placeholder='Search for a location...'
-      />
+      <div className='flex items-center justify-between w-full'>
+        <CommandInput
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setInputFocused(true)}
+          onBlur={() => setTimeout(() => setInputFocused(false), 200)}
+          placeholder='Search for a location...'
+        />
+        <SaveLocation />
+      </div>
 
       {inputFocused && (
         <CommandList>

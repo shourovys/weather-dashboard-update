@@ -1,4 +1,5 @@
 import SaveCities from '@/pages/saved-cities';
+import Weather from '@/pages/Weather';
 import { IRouteProperty } from '@/types/common';
 import { CityIcon, MapIcon, SettingsIcon, WeatherIcon } from '@/utils/icons';
 
@@ -9,7 +10,7 @@ const MENU_ROUTES: IRouteProperty = {
     label: 'Weather',
     path: '/',
     exact: true,
-    component: () => <h1> Weather</h1>,
+    component: Weather,
     icon: WeatherIcon,
     permissions: '*',
   },

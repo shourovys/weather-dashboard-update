@@ -3,6 +3,7 @@ import useAuth from '@/hooks/useAuth';
 import { useWeather } from '@/hooks/useWeather';
 import { ISaveLocation } from '@/types/location';
 import { addDocument } from '@/utils/firestoreService';
+import { CommandButton } from '../common/CommandElement';
 
 const SaveLocation = () => {
   const { user } = useAuth();
@@ -20,12 +21,15 @@ const SaveLocation = () => {
       console.error('Error adding user: ', error);
     }
   };
+
   return (
-    <div>
-      <button onClick={handleSave} className='bg-black p-3 text-textPrimary'>
-        Save
-      </button>
-    </div>
+    <CommandButton
+      className='flex-shrink-0'
+      onClick={handleSave}
+      disabled={!location}
+    >
+      Save City
+    </CommandButton>
   );
 };
 
