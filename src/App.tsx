@@ -2,6 +2,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import { SWRConfig } from 'swr';
 import { swrConfig } from './api/swrConfig';
 import { Toaster } from './components/common/Toasters';
+import AuthDialog from './components/layout/auth/AuthDialog';
 import AuthProvider from './context/authContext';
 import { WeatherProvider } from './context/weatherContext';
 import { RenderRoutes } from './routes/RenderRoutes';
@@ -15,6 +16,7 @@ function App() {
           <MainLayout>
             <RenderRoutes routes={ReactRoutes} />
           </MainLayout>
+          <AuthDialog />
           <Toaster />
         </WeatherProvider>
       </AuthProvider>

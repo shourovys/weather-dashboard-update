@@ -9,8 +9,8 @@ export const CURRENT_WEATHER_URL = (lat: string, long: string) =>
 export const FIVE_DAY_FORECAST_URL = (lat: string, long: string) =>
   `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY}`;
 
-export const GET_GOOGLE_USER_INFO = (idToken: string) =>
-  `/google/userData?idToken=${idToken}`;
+export const GET_GOOGLE_USER_INFO = (accessToken: string) =>
+  `/google/userData?accessToken=${accessToken}`;
 
 export const GET_GITHUB_USER_INFO = (code: string) =>
   `/github/userData?code=${code}`;

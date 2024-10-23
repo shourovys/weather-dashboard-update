@@ -72,4 +72,8 @@
   .blur-bg {
     @apply backdrop-blur-sm bg-gray-900/60 shadow-sm;
   }
+
+  .nsm7Bb-HzV7m-LgbsSe {
+    @apply bg-gray-900/60!;
+  }
 }
