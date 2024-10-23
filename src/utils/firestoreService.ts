@@ -2,19 +2,16 @@ import db from '@/config/databaseConfig';
 import {
   addDoc,
   collection,
-  doc,
   DocumentData,
-  getDoc,
   getDocs,
   query,
-  QuerySnapshot,
   where,
 } from 'firebase/firestore';
 
 /**
  * Add a document to a Firestore collection securely.
  * @param collectionName - Name of the collection
- * @param data - Data to add
+ * @param data - Data to add (must conform to the generic type T)
  * @returns Promise with the added document reference or an error
  */
 export const addDocument = async <T extends DocumentData>(
@@ -32,68 +29,27 @@ export const addDocument = async <T extends DocumentData>(
 };
 
 /**
- * Get all documents from a Firestore collection securely.
+ * Get documents from a collection filtered by a specific field.
  * @param collectionName - Name of the collection
- * @returns Promise with all documents or an error
- */
-export const getDocuments = async (
-  collectionName: string
-): Promise<QuerySnapshot<DocumentData>> => {
-  try {
-    const querySnapshot = await getDocs(collection(db, collectionName));
-    return querySnapshot;
-  } catch (e) {
-    console.error('Error getting documents: ', e);
-    throw new Error('Error fetching documents.');
-  }
-};
-
-/**
- * Get a specific user's data from Firestore based on the user's UID.
- * @param collectionName - Name of the collection
- * @param userId - User ID to query
- * @returns Promise with the user's document data or an error
- */
-export const getUserDocument = async (
-  collectionName: string,
-  userId: string
-) => {
-  try {
-    const docRef = doc(db, collectionName, userId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log('User Document data:', docSnap.data());
-      return docSnap.data();
-    } else {
-      console.log('No such document!');
-      throw new Error('No document found.');
-    }
-  } catch (e) {
-    console.error('Error getting user document:', e);
-    throw new Error('Error fetching user document.');
-  }
-};
-
-/**
- * Get documents from a collection filtered by a specific field, like UID.
- * @param collectionName - Name of the collection
- * @param field - The field to filter on (e.g., "userId")
+ * @param field - The field to filter on (e.g., "location")
  * @param value - The value of the field to filter by
  * @returns Promise with the filtered documents or an error
  */
-export const getDocumentsByField = async (
+export const getDocumentsByField = async <T extends DocumentData>(
   collectionName: string,
-  field: string,
-  value: string
-) => {
+  field: keyof T,
+  value: T[keyof T]
+): Promise<(T & { id: string })[]> => {
   try {
-    const q = query(collection(db, collectionName), where(field, '==', value));
+    const q = query(
+      collection(db, collectionName),
+      where(field as string, '==', value)
+    );
     const querySnapshot = await getDocs(q);
 
-    const data: DocumentData[] = [];
+    const data: (T & { id: string })[] = [];
     querySnapshot.forEach((doc) => {
-      data.push({ id: doc.id, ...doc.data() });
+      data.push({ id: doc.id, ...doc.data() } as T & { id: string });
     });
 
     return data;

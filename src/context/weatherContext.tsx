@@ -1,6 +1,7 @@
 import { CURRENT_WEATHER_URL, FIVE_DAY_FORECAST_URL } from '@/api/urls';
 import weatherReducer, { initialWeatherState } from '@/reducer/weatherReducer';
-import { IForecastData, ILocation, IWeatherData } from '@/types/weather';
+import { ILocation } from '@/types/location';
+import { IForecastData, IWeatherData } from '@/types/weather';
 import { sendGetRequest } from '@/utils/sendGetRequest';
 import React, { createContext, useEffect, useReducer } from 'react';
 

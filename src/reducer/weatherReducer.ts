@@ -1,4 +1,5 @@
-import { IForecastData, ILocation, IWeatherData } from '@/types/weather';
+import { ILocation } from '@/types/location';
+import { IForecastData, IWeatherData } from '@/types/weather';
 
 interface IWeatherState {
   location: ILocation | null;

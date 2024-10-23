@@ -5,7 +5,6 @@ import { sendAppGetRequest } from '@/utils/sendGetRequest';
 import React, {
   createContext,
   useCallback,
-  useEffect,
   useLayoutEffect,
   useMemo,
   useReducer,
@@ -31,10 +30,9 @@ interface AuthProviderProps {
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  console.log('🚀 ~ state:', state);
 
   // Fetch user details and validate token on initial mount
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchMe = async () => {
       try {
         const data = await sendAppGetRequest<IAuthResponse>('/user/me');
@@ -51,21 +49,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     };
 
-    // Load user and token from local storage on initial mount
-    const storedUser = localStorage.getItem('user');
-    const storedToken = localStorage.getItem('token');
-
-    if (storedUser && storedToken) {
-      dispatch({
-        type: 'login',
-        payload: {
-          user: JSON.parse(storedUser),
-          token: storedToken,
-        },
-      });
-    } else {
-      fetchMe();
-    }
+    fetchMe();
   }, []);
 
   // // Request interceptor to add authorization token

@@ -1,14 +1,8 @@
 import { LOCATION_API_BASE_URL } from '@/api/urls';
+import { ILocation } from '@/types/location';
 import { getUniqueData } from '@/utils/getUniqueLocations';
 import { sendGetRequest } from '@/utils/sendGetRequest';
 import { useEffect, useState } from 'react';
-
-interface ILocation {
-  display_name: string;
-  place_id: string;
-  lat: string;
-  lon: string;
-}
 
 const initLocation: ILocation[] = [
   {

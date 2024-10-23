@@ -1,10 +1,3 @@
-export interface ILocation {
-  display_name: string;
-  place_id: string;
-  lat: string;
-  lon: string;
-}
-
 export interface IWeatherData {
   coord: {
     lon: number;

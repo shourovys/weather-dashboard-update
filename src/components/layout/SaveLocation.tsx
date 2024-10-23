@@ -1,6 +1,7 @@
 import { DB_COLLECTIONS } from '@/config/config';
 import useAuth from '@/hooks/useAuth';
 import { useWeather } from '@/hooks/useWeather';
+import { ISaveLocation } from '@/types/location';
 import { addDocument } from '@/utils/firestoreService';
 
 const SaveLocation = () => {
@@ -9,10 +10,12 @@ const SaveLocation = () => {
 
   const handleSave = async () => {
     try {
-      await addDocument(DB_COLLECTIONS.location, {
-        userId: String(user?.id),
-        ...location,
-      });
+      if (user?.id && location) {
+        await addDocument<ISaveLocation>(DB_COLLECTIONS.location, {
+          userId: user?.id,
+          ...location,
+        });
+      }
     } catch (error) {
       console.error('Error adding user: ', error);
     }

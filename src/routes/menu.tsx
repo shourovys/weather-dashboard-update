@@ -1,3 +1,4 @@
+import SaveCities from '@/pages/saved-cities';
 import { IRouteProperty } from '@/types/common';
 import { CityIcon, MapIcon, SettingsIcon, WeatherIcon } from '@/utils/icons';
 
@@ -17,7 +18,7 @@ const MENU_ROUTES: IRouteProperty = {
     label: 'City',
     path: '/saved-cities',
     exact: true,
-    component: () => <h1> City</h1>,
+    component: SaveCities,
     icon: CityIcon,
     permissions: 'user',
   },

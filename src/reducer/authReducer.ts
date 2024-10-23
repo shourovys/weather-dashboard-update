@@ -13,7 +13,7 @@ type IAuthAction =
 
 export const initialState: IAuthState = {
   user: null,
-  token: null,
+  token: localStorage.getItem('token') || null,
   isAuthenticated: false,
   status: AUTH_STATUS.IDLE,
 };
@@ -23,7 +23,7 @@ const authReducer = (state: IAuthState, action: IAuthAction): IAuthState => {
     case 'login':
       return {
         ...state,
-        user: action.payload.user,
+        user: { ...action.payload.user, id: String(action.payload.user.id) },
         token: action.payload.token,
         isAuthenticated: true,
         status: AUTH_STATUS.SUCCEEDED,
@@ -36,7 +36,7 @@ const authReducer = (state: IAuthState, action: IAuthAction): IAuthState => {
     case 'updateUser':
       return {
         ...state,
-        user: action.payload.user,
+        user: { ...action.payload.user, id: String(action.payload.user.id) },
       };
     case 'status':
       return {

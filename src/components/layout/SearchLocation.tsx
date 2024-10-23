@@ -1,7 +1,7 @@
 import { useDebounce } from '@/hooks/useDebounce';
 import { useLocationSearch } from '@/hooks/useLocationSearch';
 import { useWeather } from '@/hooks/useWeather';
-import { ILocation } from '@/types/weather';
+import { ILocation } from '@/types/location';
 import { useState } from 'react';
 import {
   Command,
