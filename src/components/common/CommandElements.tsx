@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { SearchIcon } from '@/utils/icons';
+import LoadingSvg from '../loading/atomic/LoadingSvg';
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -38,16 +39,19 @@ const CommandInput = React.forwardRef<
 
 const CommandButton = React.forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => {
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    isLoading?: boolean;
+  }
+>(({ className, isLoading, children, ...props }, ref) => {
   return (
     <button
       ref={ref}
       type={props.type || 'button'} // Default to "button" if no type is provided
       className={cn(
-        'flex h-12 rounded-xl bg-transparent py-3 px-5 text-sm font-semibold hover:bg-textHover disabled:hover:bg-transparent outline-none disabled:cursor-default disabled:opacity-50',
+        'flex items-center justify-center h-12 min-w-20 rounded-xl bg-transparent py-3 px-5 text-sm font-semibold hover:bg-textHover disabled:hover:bg-transparent outline-none disabled:cursor-default disabled:opacity-50',
         className
       )}
+      children={isLoading ? <LoadingSvg /> : children}
       {...props} // Spreading the rest of the props to allow flexibility
     />
   );

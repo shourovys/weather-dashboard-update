@@ -10,7 +10,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '../common/CommandElement';
+} from '../common/CommandElements';
 import SaveLocation from './SaveLocation';
 
 function SearchLocation() {
