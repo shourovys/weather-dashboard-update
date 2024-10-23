@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { GitHubLogoIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import {
   CloudSunRain,
   Command,
@@ -16,5 +16,7 @@ export const ProfileIcon = User;
 
 export const CommandIcon = Command;
 export const SearchIcon = MagnifyingGlassIcon;
+
+export const GitHubIcon = GitHubLogoIcon;
 
 export type IconType = typeof WeatherIcon;

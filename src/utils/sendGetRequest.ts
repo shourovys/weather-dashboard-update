@@ -1,8 +1,10 @@
 import { IServerErrorResponse } from '@/api/swrConfig';
+import appApi from '@/config/apiConfig';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 // Helper Function to Process Axios Errors
 function processAxiosError(error: AxiosError<IServerErrorResponse>) {
+  console.log('🚀 ~ processAxiosError ~ error:', error);
   if (error.response) {
     // Handle specific status codes if needed
     switch (error.response.status) {
@@ -40,6 +42,19 @@ export async function sendGetRequest<T>(
 ): Promise<T> {
   try {
     const response: AxiosResponse<T> = await axios.get(url, config);
+    return response.data;
+  } catch (error) {
+    throw processAxiosError(error as AxiosError<IServerErrorResponse>);
+  }
+}
+
+// Function to send a GET request
+export async function sendAppGetRequest<T>(
+  url: string,
+  config?: AxiosRequestConfig
+): Promise<T> {
+  try {
+    const response: AxiosResponse<T> = await appApi.get(url, config);
     return response.data;
   } catch (error) {
     throw processAxiosError(error as AxiosError<IServerErrorResponse>);

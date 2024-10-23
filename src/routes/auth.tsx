@@ -1,11 +1,12 @@
+import Login from '@/pages/Login';
 import { IRouteProperty } from '@/types/common';
 
 const AUTH_ROUTES: IRouteProperty = {
   login: {
     key: 'Login',
-    path: '/',
+    path: '/login',
     exact: true,
-    component: () => <h1> Login</h1>,
+    component: Login,
     permissions: '*',
   },
 } as const;
