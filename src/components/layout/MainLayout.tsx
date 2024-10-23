@@ -1,4 +1,5 @@
 import React from 'react';
+import SearchLocation from './SearchLocation';
 import { Sidebar } from './Sidebar';
 
 interface IMainLayoutProps {
@@ -15,7 +16,17 @@ const MainLayout: React.FC<IMainLayoutProps> = ({ children }) => {
       {/* Sidebar and content */}
       <div className='container h-screen mx-auto md:p-6 2xl:p-10 overflow-x-hidden relative z-10 flex flex-col md:flex-row max-md:flex-col-reverse gap-3 md:gap-5'>
         <Sidebar />
-        <main className='w-full space-y-3 md:space-y-5'>{children}</main>
+        <main className='w-full space-y-3 md:space-y-5'>
+          <div className='grid grid-cols-3 gap-3 md:gap-5'>
+            <div className='col-span-2 space-y-3 md:space-y-5'>
+              <div className='flex items-center'>
+                <SearchLocation />
+              </div>
+            </div>
+            <div className='col-span-1'></div>
+          </div>
+          {children}
+        </main>
       </div>
     </section>
   );
