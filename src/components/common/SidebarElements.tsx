@@ -9,7 +9,7 @@ const SidebarContainer = React.forwardRef<
   return (
     <div
       className={cn(
-        'flex h-min md:h-full w-full md:w-24 flex-col md:rounded-xl p-2 blur-bg md:py-4',
+        'flex h-min md:h-full w-full md:w-24 flex-col md:rounded-xl p-2 bg-gray-800 md:blur-bg md:py-4 fixed md:static z-10 bottom-0',
         className
       )}
       data-sidebar='sidebar'
@@ -84,7 +84,7 @@ const SidebarMenuLink: React.FC<{
     <Link
       data-sidebar='menu-button'
       className={cn(
-        'flex flex-col items-center gap-0.5 text-textSecondary md:hover:bg-accent hover:text-accent-foreground rounded-xl md:p-2 text-xs md:text-sm font-bold transform transition-all duration-200 ease-in-out w-full',
+        'flex flex-col items-center gap-0.5 text-textSecondary md:hover:bg-accent md:hover:text-accent-foreground rounded-xl md:p-2 text-xs md:text-sm font-bold transform transition-all duration-200 ease-in-out w-full',
         location.pathname === to && 'text-textPrimary font-bold',
         className
       )}

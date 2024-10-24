@@ -64,7 +64,7 @@ function FiveDayForecast({ className }: IProps) {
           <div
             key={i}
             className={cn(
-              'pb-4 md:pb-6 mb-4 md:mb-6 border-b border-b-textSecondary flex items-center justify-between',
+              'pb-1 sm:pb-4 md:pb-6  mb-1 sm:mb-4 md:mb-6 border-b border-b-textSecondary flex items-center justify-between',
               className
             )}
           >

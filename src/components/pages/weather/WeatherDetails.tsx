@@ -37,7 +37,7 @@ function WeatherDetails() {
       </CardHeader>
       <CardContent>
         <Carousel>
-          <CarouselContent className='grid grid-cols-2 ml-0 gap-4 md:gap-6'>
+          <CarouselContent className='grid grid-cols-1 sm:grid-cols-2 ml-0 gap-4 md:gap-6'>
             <ContentCard
               icon={ThermometerIcon}
               title='Feels Like'

@@ -37,7 +37,7 @@ const WeatherInfo: React.FC = () => {
       <img
         src={weatherIcon}
         alt={weatherData.weather[0].description}
-        className='w-52 h-52 object-cover'
+        className='size-36 md:size-52 object-cover'
       />
     </div>
   );
