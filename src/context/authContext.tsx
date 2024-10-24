@@ -10,6 +10,7 @@ import React, {
   useMemo,
   useReducer,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Extend AxiosRequestConfig to include _isRetry
 // interface ICustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -31,6 +32,7 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const { toast } = useToast();
@@ -109,6 +111,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             return appApi(originalRequest); // Retry the original request
           } catch (error) {
             console.log('🚀 ~ error:', error);
+            navigate('/');
             dispatch({ type: 'ERROR' });
             dispatch({ type: 'LOGOUT' });
             toast({
@@ -146,6 +149,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Logout function
   const logout = useCallback(() => {
+    navigate('/');
     dispatch({ type: 'LOGOUT' });
     localStorage.removeItem('token');
     toast({

@@ -20,7 +20,7 @@ const SaveLocation = () => {
     }
 
     const isSelectedLocationSaved = savedLocationsData?.some(
-      (location: ISaveLocation) => location.place_id === location.place_id
+      (locationSV: ISaveLocation) => locationSV.place_id === location?.place_id
     );
     if (isSelectedLocationSaved) {
       toast({

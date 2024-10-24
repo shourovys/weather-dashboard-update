@@ -1,5 +1,3 @@
-'use client';
-
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as React from 'react';
 
@@ -12,7 +10,7 @@ const Avatar = React.forwardRef<
   <AvatarPrimitive.Root
     ref={ref}
     className={cn(
-      'relative flex w-12 h-12 shrink-0 overflow-hidden rounded-full cursor-pointer',
+      'relative flex w-10 h-10 shrink-0 overflow-hidden rounded-full cursor-pointer',
       className
     )}
     {...props}
