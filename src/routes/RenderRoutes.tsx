@@ -1,5 +1,5 @@
 import LoadingSvg from '@/components/loading/atomic/LoadingSvg';
-import NotFoundPage from '@/pages/NotFound';
+import NotFoundPage from '@/pages/not-found';
 import { IRoute } from '@/types/common';
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
