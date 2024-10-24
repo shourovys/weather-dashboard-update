@@ -106,7 +106,7 @@ Here’s a link to the live demo (if hosted).
 ### Assumptions and Decisions Made:
 
 1. **Location Service**: I used a third-party paid service to fetch and suggest city locations for users to select from when searching for weather data.
-2. **Proxy Backend for Security**: To manage sensitive authentication credentials, I implemented a proxy backend. This ensures that sensitive information, such as GITHUB_CLIENT_SECRET, is securely handled on the server side and not exposed in the frontend. also use for verify access token.
+2. **Proxy Backend for Security**: To manage sensitive authentication credentials, I implemented a proxy backend. This ensures that sensitive information, such as GITHUB_CLIENT_SECRET, is securely handled on the server side and not exposed in the frontend. also used for verifying access tokens.
 3. **TypeScript for Type Safety**: The project was built using TypeScript to ensure type safety, reduce bugs, and improve maintainability.
 4. **Context API for State Management**: The Context API was implemented in a scalable and maintainable manner to handle global state, particularly authentication and weather data.
 5. **Reusable Component Architecture**: The application was designed with reusable component-based architecture to support scalability and ensure efficient code reuse.
