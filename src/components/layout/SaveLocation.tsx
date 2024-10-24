@@ -8,13 +8,16 @@ import { useState } from 'react';
 import { CommandButton } from '../common/CommandElements';
 
 const SaveLocation = () => {
-  const { user } = useAuth();
+  const { user, isAuthenticated, openAuthDialog } = useAuth();
   const { location } = useWeather();
   const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
+    if (!isAuthenticated) {
+      openAuthDialog(true);
+    }
     try {
       if (user?.id && location) {
         setIsLoading(true);

@@ -1,4 +1,6 @@
+import LoadingSvg from '@/components/loading/atomic/LoadingSvg';
 import useAuth from '@/hooks/useAuth';
+import { AUTH_STATUS } from '@/types/auth';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -9,14 +11,17 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: Component,
 }) => {
-  const { token } = useAuth();
+  const { isAuthenticated, openAuthDialog, status } = useAuth();
 
-  // Check if the user is authenticated or if permissions match
-  const isAuthenticated = !!token;
-
-  // If the user is not authenticated, redirect to login
-  if (!isAuthenticated) {
-    return <Navigate to='/login' />;
+  // If the status is pending, wait for the authentication process to complete
+  if (status === AUTH_STATUS.PENDING) {
+    <div className='flex items-center justify-center w-full h-full'>
+      <LoadingSvg className='w-10 h-10' />
+    </div>;
+  } else if (!isAuthenticated) {
+    // If the user is not authenticated, open Auth Dialog to login
+    openAuthDialog(true);
+    return <Navigate to='/' />;
   }
 
   // If the user is authenticated, render the component

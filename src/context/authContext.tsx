@@ -20,6 +20,7 @@ export interface IAuthContextType extends IAuthState {
   logout: () => void;
   updateUser: (user: IUser) => void;
   setAuthenticationStatus: (status: AUTH_STATUS) => void;
+  openAuthDialog: (isAuthModalOpen: boolean) => void;
 }
 
 export const AuthContext = createContext<IAuthContextType | null>(null);
@@ -33,18 +34,22 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Fetch user details and validate token on initial mount
   useLayoutEffect(() => {
+    dispatch({
+      type: 'STATUS',
+      payload: { status: AUTH_STATUS.PENDING },
+    });
     const fetchMe = async () => {
       try {
         const data = await sendAppGetRequest<IAuthResponse>('/user/me');
         dispatch({
-          type: 'login',
+          type: 'LOGIN',
           payload: data,
         });
         localStorage.setItem('user', JSON.stringify(data.user)); // Store user data
         localStorage.setItem('token', data.token); // Store token
       } catch (error) {
         console.error('Failed to fetch user data:', error);
-        dispatch({ type: 'error' });
+        dispatch({ type: 'ERROR' });
         logout(); // If the token is invalid, log the user out
       }
     };
@@ -75,6 +80,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Response interceptor to handle token refresh
   useLayoutEffect(() => {
+    dispatch({
+      type: 'STATUS',
+      payload: { status: AUTH_STATUS.PENDING },
+    });
     const refreshInterceptor = appApi.interceptors.response.use(
       (response) => response,
       async (error) => {
@@ -86,7 +95,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             );
 
             dispatch({
-              type: 'login',
+              type: 'LOGIN',
               payload: data,
             });
 
@@ -98,7 +107,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             return appApi(originalRequest); // Retry the original request
           } catch (error) {
             console.log('🚀 ~ error:', error);
-            dispatch({ type: 'error' });
+            dispatch({ type: 'ERROR' });
             logout();
           }
         }
@@ -114,7 +123,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Login function to store token and user data
   const login = useCallback((user: IUser, token: string) => {
     dispatch({
-      type: 'login',
+      type: 'LOGIN',
       payload: {
         user,
         token,
@@ -125,14 +134,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Logout function
   const logout = useCallback(() => {
-    dispatch({ type: 'logout' });
+    dispatch({ type: 'LOGOUT' });
     localStorage.removeItem('token');
   }, []);
 
   // Update user profile in state
   const updateUser = useCallback((user: IUser) => {
     dispatch({
-      type: 'updateUser',
+      type: 'UPDATE_USER',
       payload: { user },
     });
   }, []);
@@ -140,8 +149,16 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Update authentication status
   const setAuthenticationStatus = useCallback((status: AUTH_STATUS) => {
     dispatch({
-      type: 'status',
+      type: 'STATUS',
       payload: { status },
+    });
+  }, []);
+
+  // Update Modal status
+  const openAuthDialog = useCallback((isAuthModalOpen: boolean) => {
+    dispatch({
+      type: 'OPEN_AUTH_DIALOG',
+      payload: { isAuthModalOpen },
     });
   }, []);
 
@@ -152,6 +169,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       logout,
       updateUser,
       setAuthenticationStatus,
+      openAuthDialog,
     }),
     [state, login, logout, updateUser, setAuthenticationStatus]
   );

@@ -1,52 +1,76 @@
 import { AUTH_STATUS, IAuthState, IUser } from '@/types/auth';
 
-// Using a discriminated union for AuthAction
+export const authActionTypes = {
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
+  UPDATE_USER: 'UPDATE_USER',
+  STATUS: 'STATUS',
+  ERROR: 'ERROR',
+  OPEN_AUTH_DIALOG: 'OPEN_AUTH_DIALOG',
+} as const;
+
+type ActionType = typeof authActionTypes;
+
 type IAuthAction =
   | {
-      type: 'login';
+      type: ActionType['LOGIN'];
       payload: { user: IUser; token: string };
     }
-  | { type: 'logout' }
-  | { type: 'updateUser'; payload: { user: IUser } }
-  | { type: 'status'; payload: { status: AUTH_STATUS } }
-  | { type: 'error' };
+  | { type: ActionType['LOGOUT'] }
+  | { type: ActionType['UPDATE_USER']; payload: { user: IUser } }
+  | { type: ActionType['STATUS']; payload: { status: AUTH_STATUS } }
+  | { type: ActionType['ERROR'] }
+  | {
+      type: ActionType['OPEN_AUTH_DIALOG'];
+      payload: { isAuthModalOpen: boolean };
+    };
 
 export const initialState: IAuthState = {
   user: null,
   token: localStorage.getItem('token') || null,
   isAuthenticated: false,
-  status: AUTH_STATUS.IDLE,
+  status: AUTH_STATUS.PENDING,
+  isAuthModalOpen: false,
 };
 
 const authReducer = (state: IAuthState, action: IAuthAction): IAuthState => {
   switch (action.type) {
-    case 'login':
+    case authActionTypes.LOGIN:
       return {
         ...state,
         user: { ...action.payload.user, id: String(action.payload.user.id) },
         token: action.payload.token,
         isAuthenticated: true,
         status: AUTH_STATUS.SUCCEEDED,
+        isAuthModalOpen: false,
       };
-    case 'logout':
+    case authActionTypes.LOGOUT:
       return {
         ...initialState,
         status: AUTH_STATUS.IDLE,
       };
-    case 'updateUser':
+    case authActionTypes.UPDATE_USER:
       return {
         ...state,
         user: { ...action.payload.user, id: String(action.payload.user.id) },
       };
-    case 'status':
+    case authActionTypes.STATUS:
       return {
         ...state,
         status: action.payload.status,
       };
-    case 'error':
+    case authActionTypes.ERROR:
       return {
         ...state,
         status: AUTH_STATUS.FAILED,
+      };
+    case authActionTypes.OPEN_AUTH_DIALOG:
+      return {
+        ...state,
+        isAuthModalOpen:
+          action.payload.isAuthModalOpen === true && !state.isAuthenticated
+            ? true
+            : false,
       };
     default:
       return state;

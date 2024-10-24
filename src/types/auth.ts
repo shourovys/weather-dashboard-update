@@ -17,6 +17,7 @@ export interface IAuthState {
   token: string | null;
   isAuthenticated: boolean;
   status: AUTH_STATUS;
+  isAuthModalOpen: boolean;
 }
 
 export interface IAuthResponse {
