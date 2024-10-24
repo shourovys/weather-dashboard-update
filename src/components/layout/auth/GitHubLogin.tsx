@@ -1,15 +1,9 @@
-import { GET_GITHUB_USER_INFO } from '@/api/urls';
 import AuthButton from '@/components/layout/auth/AuthButton';
 import { GITHUB_CLIENT_ID } from '@/config/config';
-import useAuth from '@/hooks/useAuth';
-import { IAuthResponse } from '@/types/auth';
 import { GitHubIcon } from '@/utils/icons';
-import { sendAppGetRequest } from '@/utils/sendGetRequest';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const GitHubLoginButton: React.FC = () => {
-  const { login } = useAuth();
-
   const handleGitHubLogin = () => {
     const clientId = GITHUB_CLIENT_ID;
     const callbackUrl = `${window.location}`;
@@ -19,28 +13,6 @@ const GitHubLoginButton: React.FC = () => {
 
     window.location.href = targetUrl; // Redirect to GitHub's OAuth page
   };
-
-  const handelGithubLoginSuccess = async (code: string) => {
-    try {
-      const data = await sendAppGetRequest<IAuthResponse>(
-        GET_GITHUB_USER_INFO(code)
-      );
-
-      login(data.user, data.token);
-    } catch (error) {
-      console.log('🚀 ~ useEffect ~ error:', error);
-    }
-  };
-
-  useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    const code = query.get('code'); // Get the authorization code from the callback URL
-
-    if (code) {
-      // Exchange the authorization code for an access token
-      handelGithubLoginSuccess(code);
-    }
-  }, []);
 
   return (
     <AuthButton
