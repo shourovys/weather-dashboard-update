@@ -21,7 +21,6 @@ A simple web application that integrates both public and private APIs using OAut
    - [Backend (Firestore)](#backend-firestore-setup)
 4. [How to Use](#how-to-use)
 5. [Assumptions and Decisions](#assumptions-and-decisions)
-6. [License](#license)
 
 ---
 
