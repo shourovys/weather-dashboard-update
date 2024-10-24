@@ -50,11 +50,10 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({
       const weatherData = await sendGetRequest<IWeatherData>(
         CURRENT_WEATHER_URL(state.location.lat, state.location.lon)
       );
+      dispatch({ type: 'FETCH_WEATHER_SUCCESS', payload: weatherData });
       const forecastData = await sendGetRequest<IForecastData>(
         FIVE_DAY_FORECAST_URL(state.location.lat, state.location.lon)
       );
-
-      dispatch({ type: 'FETCH_WEATHER_SUCCESS', payload: weatherData });
       dispatch({ type: 'FETCH_FORECAST_SUCCESS', payload: forecastData });
     } catch (err) {
       console.error('🚀 ~ fetchWeatherData ~ err:', err);
