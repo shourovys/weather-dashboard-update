@@ -47,6 +47,7 @@ const authReducer = (state: IAuthState, action: IAuthAction): IAuthState => {
     case authActionTypes.LOGOUT:
       return {
         ...initialState,
+        token: null,
         status: AUTH_STATUS.IDLE,
       };
     case authActionTypes.UPDATE_USER:
@@ -65,13 +66,19 @@ const authReducer = (state: IAuthState, action: IAuthAction): IAuthState => {
         status: AUTH_STATUS.FAILED,
       };
     case authActionTypes.OPEN_AUTH_DIALOG:
-      return {
-        ...state,
-        isAuthModalOpen:
-          action.payload.isAuthModalOpen === true && !state.isAuthenticated
-            ? true
-            : false,
-      };
+      if (action.payload.isAuthModalOpen === true && !state.isAuthenticated) {
+        return {
+          ...state,
+          isAuthModalOpen: true,
+          status: AUTH_STATUS.PENDING,
+        };
+      } else {
+        return {
+          ...state,
+          isAuthModalOpen: false,
+          status: AUTH_STATUS.IDLE,
+        };
+      }
     default:
       return state;
   }

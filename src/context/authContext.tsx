@@ -1,4 +1,5 @@
 import appApi from '@/config/apiConfig';
+import { useToast } from '@/hooks/useToasts';
 import authReducer, { initialState } from '@/reducer/authReducer';
 import { AUTH_STATUS, IAuthResponse, IAuthState, IUser } from '@/types/auth';
 import { sendAppGetRequest } from '@/utils/sendGetRequest';
@@ -32,6 +33,8 @@ interface AuthProviderProps {
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  const { toast } = useToast();
+
   // Fetch user details and validate token on initial mount
   useLayoutEffect(() => {
     dispatch({
@@ -45,12 +48,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           type: 'LOGIN',
           payload: data,
         });
-        localStorage.setItem('user', JSON.stringify(data.user)); // Store user data
-        localStorage.setItem('token', data.token); // Store token
+        localStorage.setItem('token', data.token);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
         dispatch({ type: 'ERROR' });
-        logout(); // If the token is invalid, log the user out
+        dispatch({ type: 'LOGOUT' });
       }
     };
 
@@ -108,7 +110,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           } catch (error) {
             console.log('🚀 ~ error:', error);
             dispatch({ type: 'ERROR' });
-            logout();
+            dispatch({ type: 'LOGOUT' });
+            toast({
+              title: 'Login Failed',
+              description: 'Your session has expired. Please login again.',
+              duration: 3000,
+            });
           }
         }
         throw error;
@@ -130,12 +137,22 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       },
     });
     localStorage.setItem('token', token);
+    toast({
+      title: 'Login Success',
+      description: 'You have successfully logged in.',
+      duration: 3000,
+    });
   }, []);
 
   // Logout function
   const logout = useCallback(() => {
     dispatch({ type: 'LOGOUT' });
     localStorage.removeItem('token');
+    toast({
+      title: 'Logout Success',
+      description: 'Your session has been logged out.',
+      duration: 3000,
+    });
   }, []);
 
   // Update user profile in state

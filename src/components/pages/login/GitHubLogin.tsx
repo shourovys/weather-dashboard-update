@@ -12,7 +12,7 @@ const GitHubLoginButton: React.FC = () => {
 
   const handleGitHubLogin = () => {
     const clientId = GITHUB_CLIENT_ID;
-    const callbackUrl = `${window.location.origin}/login`;
+    const callbackUrl = `${window.location}`;
     const targetUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
       callbackUrl
     )}&scope=read:user,user:email`;
