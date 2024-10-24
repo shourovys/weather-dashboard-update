@@ -41,14 +41,16 @@ const LocationCard: React.FC<IProps> = ({ location }) => {
         <img
           src={`http://openweathermap.org/img/wn/${weather[0]?.icon}@4x.png`}
           alt={weather[0]?.description}
-          className='size-20 md:size-32 object-cover'
+          className='size-20 md:size-32 object-cover hidden sm:block'
         />
         <div className='flex justify-between w-full gap-3 md:gap-5'>
           <div className='space-y-1'>
-            <p className='text-3xl '>{location.display_name}</p>
-            <p className='text-xl'>{weather[0]?.description}</p>
+            <p className='text-xl sm:text-2xl md:text-3xl '>
+              {location.display_name}
+            </p>
+            <p className='text-lg md:text-xl'>{weather[0]?.description}</p>
           </div>
-          <p className='font-bold text-4xl md:text-5xl'>
+          <p className='font-bold text-3xl sm:text-4xl md:text-5xl'>
             {kelvinToCelsius(main.temp)}°
           </p>
         </div>

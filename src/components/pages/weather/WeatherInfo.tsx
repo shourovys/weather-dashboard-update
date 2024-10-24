@@ -1,8 +1,11 @@
 import LoadingSvg from '@/components/loading/atomic/LoadingSvg';
 import { useWeather } from '@/hooks/useWeather';
-import { kelvinToCelsius } from '@/lib/utils';
+import { cn, kelvinToCelsius } from '@/lib/utils';
 
-const WeatherInfo: React.FC = () => {
+interface IProps {
+  className?: string;
+}
+const WeatherInfo: React.FC<IProps> = ({ className }) => {
   const { weatherData, weatherLoading } = useWeather();
 
   if (weatherLoading || !weatherData) {
@@ -22,7 +25,12 @@ const WeatherInfo: React.FC = () => {
   const weatherIcon = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`;
 
   return (
-    <div className='text-textPrimary rounded-xl p-4 md:p-8 md:py-4 flex justify-between drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.6)]'>
+    <div
+      className={cn(
+        'text-textPrimary rounded-xl p-4 md:p-8 md:py-4 flex justify-between drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.6)]',
+        className
+      )}
+    >
       <div className='flex flex-col justify-between font-bold '>
         <div className='space-y-1 md:space-y-2'>
           <h2 className='text-5xl '>{description}</h2>

@@ -15,8 +15,10 @@ const MainLayout: React.FC<IMainLayoutProps> = ({ children }) => {
   const image = getWeatherBG(weatherData?.weather[0].main || '');
   return (
     <section
-      className='relative bg-cover bg-center bg-repeat-y min-h-full h-screen bg-gray-800'
-      style={{ backgroundImage: `url(${image})` }}
+      className='relative bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-gray-800'
+      style={{
+        backgroundImage: `url(${image})`,
+      }}
     >
       {/* Sidebar and content */}
       <div className='container h-full mx-auto md:p-6 2xl:p-10 relative z-10 flex flex-col md:flex-row gap-3 md:gap-5'>

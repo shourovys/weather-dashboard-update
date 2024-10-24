@@ -15,13 +15,13 @@ const SaveCities = () => {
   }, []);
 
   return (
-    <div className='grid grid-cols-3 gap-3 md:gap-5'>
+    <div className='lg:grid lg:grid-cols-3 gap-3 md:gap-5'>
       <div className='col-span-2 space-y-3 md:space-y-5'>
         <SavedLocations />
       </div>
-      <div className='col-span-1 space-y-3 md:space-y-5'>
+      <div className='col-span-1 space-y-3 md:space-y-5 w-full'>
         <div className='rounded-xl blur-bg'>
-          <WeatherInfo />
+          <WeatherInfo className='p-4 md:p-6 md:py-6 md:flex-col-reverse 2xl:flex-row' />
         </div>
         <DailyForecast />
         <FiveDayForecast className='pb-1 mb-1 md:pb-1 md:mb-1' />

@@ -9,7 +9,7 @@ const SidebarContainer = React.forwardRef<
   return (
     <div
       className={cn(
-        'flex h-min md:h-full w-full md:w-24 flex-col md:rounded-xl p-2 bg-gray-800 md:blur-bg md:py-4 fixed md:static z-10 bottom-0',
+        'flex h-min md:h-[calc(100vh-5rem)] md:min-h-max w-full md:w-24 flex-col md:rounded-xl p-2 bg-gray-800 md:blur-bg md:py-4 fixed md:static z-10 bottom-0 ',
         className
       )}
       data-sidebar='sidebar'
