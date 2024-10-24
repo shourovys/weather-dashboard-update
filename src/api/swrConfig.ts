@@ -31,6 +31,8 @@ export const swrConfig: SWRConfiguration = {
     serverErrorHandler(error);
   },
   onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+    console.log('🚀 ~ config:', config);
+    console.log('🚀 ~ key:', key);
     // Never retry on 404.
     if (error.status === 404) return;
 
