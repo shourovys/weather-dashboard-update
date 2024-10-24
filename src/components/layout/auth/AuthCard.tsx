@@ -1,5 +1,5 @@
-import GitHubLoginButton from '@/components/pages/login/GitHubLogin';
-import GoogleLoginButton from '@/components/pages/login/GoogleLogIn';
+import GitHubLoginButton from '@/components/layout/auth/GitHubLogin';
+import GoogleLoginButton from '@/components/layout/auth/GoogleLogIn';
 
 const AuthCard: React.FC = () => {
   return (
