@@ -38,14 +38,21 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({
     dispatch({ type: 'FETCH_REQUEST' });
 
     try {
-      const [weatherData, forecastData] = await Promise.all([
-        sendGetRequest<IWeatherData>(
-          CURRENT_WEATHER_URL(state.location.lat, state.location.lon)
-        ),
-        sendGetRequest<IForecastData>(
-          FIVE_DAY_FORECAST_URL(state.location.lat, state.location.lon)
-        ),
-      ]);
+      // const [weatherData, forecastData] = await Promise.all([
+      //   sendGetRequest<IWeatherData>(
+      //     CURRENT_WEATHER_URL(state.location.lat, state.location.lon)
+      //   ),
+      //   sendGetRequest<IForecastData>(
+      //     FIVE_DAY_FORECAST_URL(state.location.lat, state.location.lon)
+      //   ),
+      // ]);
+
+      const weatherData = await sendGetRequest<IWeatherData>(
+        CURRENT_WEATHER_URL(state.location.lat, state.location.lon)
+      );
+      const forecastData = await sendGetRequest<IForecastData>(
+        FIVE_DAY_FORECAST_URL(state.location.lat, state.location.lon)
+      );
 
       dispatch({ type: 'FETCH_WEATHER_SUCCESS', payload: weatherData });
       dispatch({ type: 'FETCH_FORECAST_SUCCESS', payload: forecastData });
