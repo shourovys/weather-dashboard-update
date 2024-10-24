@@ -1,3 +1,4 @@
+import Profile from '@/pages/profile';
 import { IRouteProperty } from '@/types/common';
 import { ProfileIcon } from '@/utils/icons';
 
@@ -7,7 +8,7 @@ const OTHER_ROUTES: IRouteProperty = {
     label: 'Profile',
     path: '/profile',
     exact: true,
-    component: () => <h1> Login</h1>,
+    component: Profile,
     icon: ProfileIcon,
     permissions: 'user',
   },
