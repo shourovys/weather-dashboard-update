@@ -25,7 +25,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   }
 
   // If the user is authenticated, render the component
-  return <Component />;
+  if (isAuthenticated) {
+    return <Component />;
+  }
 };
 
 export default PrivateRoute;

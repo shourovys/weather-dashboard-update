@@ -1,11 +1,14 @@
+import Map from '@/pages/map';
+import SaveCities from '@/pages/saved-cities';
+import Settings from '@/pages/settings';
+import Weather from '@/pages/Weather';
 import { IRouteProperty } from '@/types/common';
 import { CityIcon, MapIcon, SettingsIcon, WeatherIcon } from '@/utils/icons';
-import { lazy } from 'react';
 
-const Weather = lazy(() => import('@/pages/Weather'));
-const SaveCities = lazy(() => import('@/pages/saved-cities'));
-const Map = lazy(() => import('@/pages/map'));
-const Settings = lazy(() => import('@/pages/settings'));
+// const Weather = lazy(() => import('@/pages/Weather'));
+// const SaveCities = lazy(() => import('@/pages/saved-cities'));
+// const Map = lazy(() => import('@/pages/map'));
+// const Settings = lazy(() => import('@/pages/settings'));
 
 // Define routes with TypeScript
 const MENU_ROUTES: IRouteProperty = {

@@ -16,25 +16,9 @@ const UserAvatar: React.FC<{ className?: string }> = ({ className }) => {
 
   if (!isAuthenticated) {
     return (
-      <Popover>
-        <PopoverTrigger>
-          <Avatar className={className}>
-            <AvatarImage src='/images/no_user.png' alt={user?.name} />
-          </Avatar>
-        </PopoverTrigger>
-        <PopoverContent
-          align='end'
-          className='flex items-center justify-center'
-        >
-          <Button
-            variant='secondary'
-            onClick={() => openAuthDialog(true)}
-            className='mt-2'
-          >
-            Login
-          </Button>
-        </PopoverContent>
-      </Popover>
+      <Avatar className={className} onClick={() => openAuthDialog(true)}>
+        <AvatarImage src='/images/no_user.png' alt={user?.name} />
+      </Avatar>
     );
   }
 

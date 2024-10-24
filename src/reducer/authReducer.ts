@@ -27,7 +27,7 @@ type IAuthAction =
 
 export const initialState: IAuthState = {
   user: null,
-  token: localStorage.getItem('token') || null,
+  token: null,
   isAuthenticated: false,
   status: AUTH_STATUS.PENDING,
   isAuthModalOpen: false,
