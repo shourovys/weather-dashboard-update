@@ -9,7 +9,7 @@ import { CommandButton } from '../common/CommandElements';
 
 const SaveLocation = () => {
   const { user, isAuthenticated, openAuthDialog } = useAuth();
-  const { location } = useWeather();
+  const { location, savedLocationsData } = useWeather();
   const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -18,10 +18,24 @@ const SaveLocation = () => {
     if (!isAuthenticated) {
       openAuthDialog(true);
     }
+
+    const isSelectedLocationSaved = savedLocationsData?.some(
+      (location: ISaveLocation) => location.place_id === location.place_id
+    );
+    if (isSelectedLocationSaved) {
+      toast({
+        title: 'Location already saved',
+        description: 'You have already saved this location.',
+        duration: 3000,
+      });
+
+      return;
+    }
+
     try {
       if (user?.id && location) {
         setIsLoading(true);
-        await addDocument<ISaveLocation>(DB_COLLECTIONS.location, {
+        await addDocument<Omit<ISaveLocation, 'id'>>(DB_COLLECTIONS.location, {
           userId: user?.id,
           ...location,
         });

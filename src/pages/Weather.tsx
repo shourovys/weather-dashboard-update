@@ -1,12 +1,19 @@
+import DailyForecast from '@/components/pages/weather/DailyForecast';
+import FiveDayForecast from '@/components/pages/weather/FiveDayForecast';
+import WeatherDetails from '@/components/pages/weather/WeatherDetails';
 import WeatherInfo from '@/components/pages/weather/WeatherInfo';
-import { useWeather } from '@/hooks/useWeather';
 
 const Weather = () => {
-  const { weatherData } = useWeather();
-
   return (
-    <div>
-      <WeatherInfo weatherData={weatherData} />
+    <div className='grid grid-cols-3 gap-3 md:gap-5'>
+      <div className='col-span-2 space-y-3 md:space-y-5'>
+        <WeatherInfo />
+        <DailyForecast />
+        <WeatherDetails />
+      </div>
+      <div className='col-span-1'>
+        <FiveDayForecast />
+      </div>
     </div>
   );
 };

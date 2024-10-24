@@ -2,7 +2,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useLocationSearch } from '@/hooks/useLocationSearch';
 import { useWeather } from '@/hooks/useWeather';
 import { ILocation } from '@/types/location';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Command,
   CommandEmpty,
@@ -45,6 +45,10 @@ function SearchLocation() {
     setQuery(location.display_name);
     setInputFocused(false);
   };
+
+  useEffect(() => {
+    setQuery(currentSelectedLocation?.display_name || '');
+  }, [currentSelectedLocation]);
 
   return (
     <Command className=''>

@@ -95,10 +95,17 @@ const weatherReducer = (
       return { ...state, savedLocationsLoading: true, error: null };
 
     case 'FETCH_SAVED_LOCATIONS_SUCCESS':
+      if (action.payload.length > 0) {
+        return {
+          ...state,
+          savedLocationsLoading: false,
+          savedLocationsData: action.payload,
+        };
+      }
+
       return {
         ...state,
         savedLocationsLoading: false,
-        savedLocationsData: action.payload,
       };
 
     case 'FETCH_SAVED_LOCATIONS_FAILURE':

@@ -1,30 +1,38 @@
-import { IWeatherData } from '@/types/weather';
+import LoadingSvg from '@/components/loading/atomic/LoadingSvg';
+import { useWeather } from '@/hooks/useWeather';
+import { kelvinToCelsius } from '@/lib/utils';
 
-interface IWeatherInfoProps {
-  weatherData: IWeatherData | null;
-}
+const WeatherInfo: React.FC = () => {
+  const { weatherData, weatherLoading } = useWeather();
 
-const WeatherInfo: React.FC<IWeatherInfoProps> = ({ weatherData }) => {
-  if (!weatherData) {
-    return <div>Loading...</div>; // Optional: Loading state
+  if (weatherLoading || !weatherData) {
+    return (
+      <div className='w-full h-56 md:h-60 flex items-center justify-center'>
+        <LoadingSvg className='w-10 h-10' />
+      </div>
+    );
   }
+  const { main, weather } = weatherData;
+  const { description } = weather[0];
+  // const { main: weatherMain, description } = weather[0];
 
-  const temperatureCelsius = (weatherData.main.temp - 273.15).toFixed(0); // Convert from Kelvin to Celsius
-  const chanceOfRain =
-    weatherData?.rain && weatherData?.rain['1h'] ? weatherData.rain['1h'] : 0; // Get rain data or set to 0 if not available
-  const weatherIcon = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`; // Build URL for the weather icon
+  const temp = kelvinToCelsius(main?.temp);
+  const minTemp = kelvinToCelsius(main?.temp_min);
+  const maxTemp = kelvinToCelsius(main?.temp_max);
+  const weatherIcon = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`;
 
   return (
-    <div className='text-textPrimary rounded-xl p-4 md:p-8 flex justify-between drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.6)]'>
+    <div className='text-textPrimary rounded-xl p-4 md:p-8 md:py-4 flex justify-between drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.6)]'>
       <div className='flex flex-col justify-between font-bold '>
         <div className='space-y-1 md:space-y-2'>
-          <h2 className='text-5xl '>{weatherData.name}</h2>
-          <p className='text-base md:text-lg font-semibold '>
-            Next Hour Rain: {chanceOfRain} mm
+          <h2 className='text-5xl '>{description}</h2>
+          <p className='flex items-center gap-2 text-base md:text-lg font-semibold '>
+            <span>Low: {minTemp}°</span>
+            <span>High: {maxTemp}°</span>
           </p>
         </div>
 
-        <p className='text-7xl'> {temperatureCelsius}°</p>
+        <p className='text-7xl'> {temp}°</p>
       </div>
       <img
         src={weatherIcon}
