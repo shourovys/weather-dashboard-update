@@ -1,4 +1,5 @@
 export interface ISaveLocation extends ILocation {
+  id: string;
   userId: string;
 }
 

@@ -4,41 +4,12 @@ import { getUniqueData } from '@/utils/getUniqueLocations';
 import { sendGetRequest } from '@/utils/sendGetRequest';
 import { useEffect, useState } from 'react';
 
-const initLocation: ILocation[] = [
-  {
-    display_name: 'Dhaka, Bangladesh',
-    place_id: '324122088023',
-    lat: '23.7644025',
-    lon: '90.389015',
-  },
-  {
-    display_name: 'Dhaka Division, Bangladesh',
-    place_id: '323693304022',
-    lat: '23.9456166',
-    lon: '90.2526382',
-  },
-  {
-    display_name: 'Dhaka, Bihar, 845418, India',
-    place_id: '320379156252',
-    lat: '26.6923775',
-    lon: '85.19863621',
-  },
-  {
-    display_name: 'Dhaka District, Dhaka Division, Bangladesh',
-    place_id: '323458673339',
-    lat: '23.78047185',
-    lon: '90.35832872',
-  },
-  {
-    display_name: 'Keraniganj Subdistrict, Dhaka Division, Bangladesh',
-    place_id: '321726558922',
-    lat: '23.7179868',
-    lon: '90.35375362',
-  },
-];
-
 // Custom hook for fetching location suggestions
-export function useLocationSearch(query: string, isFocused: boolean) {
+export function useLocationSearch(
+  query: string,
+  isFocused: boolean,
+  initLocation: ILocation[] = []
+) {
   const [locations, setLocations] = useState<ILocation[]>(initLocation);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
@@ -72,6 +43,12 @@ export function useLocationSearch(query: string, isFocused: boolean) {
 
     fetchLocations();
   }, [query]);
+
+  useEffect(() => {
+    if (isFocused) {
+      setLocations(initLocation);
+    }
+  }, [isFocused]);
 
   return { locations, isLoading, error };
 }

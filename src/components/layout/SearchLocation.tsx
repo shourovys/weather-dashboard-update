@@ -14,13 +14,30 @@ import {
 import SaveLocation from './SaveLocation';
 
 function SearchLocation() {
-  const { setLocation } = useWeather();
+  const {
+    location: currentSelectedLocation,
+    setLocation,
+    savedLocationsData,
+  } = useWeather();
   const [debouncedQuery, query, setQuery] = useDebounce<string>('', 1000);
   const [inputFocused, setInputFocused] = useState(false);
 
+  const initLocations: ILocation[] | undefined = savedLocationsData
+    ?.slice(0, 6)
+    .filter(
+      (location) => location.place_id !== currentSelectedLocation?.place_id
+    )
+    ?.map(({ display_name, place_id, lat, lon }) => ({
+      display_name,
+      place_id,
+      lat,
+      lon,
+    }));
+
   const { locations, isLoading, error } = useLocationSearch(
     debouncedQuery,
-    inputFocused
+    inputFocused,
+    initLocations
   );
 
   const handleSelectLocation = (location: ILocation) => {
