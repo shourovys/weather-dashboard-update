@@ -1,4 +1,5 @@
 import React from 'react';
+import UserAvatar from '../atomic/UserAvatar';
 import SearchLocation from './SearchLocation';
 import { Sidebar } from './Sidebar';
 
@@ -23,7 +24,9 @@ const MainLayout: React.FC<IMainLayoutProps> = ({ children }) => {
                 <SearchLocation />
               </div>
             </div>
-            <div className='col-span-1'></div>
+            <div className='col-span-1 ml-auto'>
+              <UserAvatar />
+            </div>
           </div>
           {children}
         </main>
