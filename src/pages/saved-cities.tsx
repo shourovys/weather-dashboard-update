@@ -15,7 +15,7 @@ const SaveCities = () => {
   }, []);
 
   return (
-    <div className='lg:grid lg:grid-cols-3 gap-3 md:gap-5'>
+    <div className='lg:grid lg:grid-cols-3 space-y-3 lg:gap-5'>
       <div className='col-span-2 space-y-3 md:space-y-5'>
         <SavedLocations />
       </div>

@@ -19,7 +19,7 @@ function HelperPages({
   const navigate = useNavigate();
 
   return (
-    <section className='flex items-center h-full p-16 bg-coolGray-900 text-coolGray-100'>
+    <section className='flex items-center p-16 md:py-36 bg-coolGray-900 text-coolGray-100'>
       <div className='container flex flex-col items-center justify-center px-5 mx-auto my-8'>
         <div className='max-w-md text-center'>
           <h2 className='mb-8 font-extrabold text-9xl text-coolGray-600'>

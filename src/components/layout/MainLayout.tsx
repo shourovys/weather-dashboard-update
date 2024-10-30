@@ -21,9 +21,9 @@ const MainLayout: React.FC<IMainLayoutProps> = ({ children }) => {
       }}
     >
       {/* Sidebar and content */}
-      <div className='container h-full mx-auto md:p-6 2xl:p-10 relative z-10 flex flex-col md:flex-row gap-3 md:gap-5'>
+      <div className='md:container h-full mx-auto md:p-6 2xl:p-10 relative z-10 flex flex-col md:flex-row gap-3 md:gap-5 pb-16 md:pb-6'>
         <Sidebar />
-        <main className='w-full space-y-3 md:space-y-5 p-2 md:p-0'>
+        <main className='w-full space-y-3 md:space-y-5 p-2 sm:p-4 md:p-0'>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5'>
             <div className='col-span-2 space-y-3 md:space-y-5'>
               <SearchLocation />
