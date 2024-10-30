@@ -11,23 +11,28 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: Component,
 }) => {
-  const { isAuthenticated, openAuthDialog, status } = useAuth();
+  const { openAuthDialog, status } = useAuth();
 
-  // If the status is pending, wait for the authentication process to complete
-  if (status === AUTH_STATUS.PENDING) {
-    <div className='flex items-center justify-center w-full h-full'>
-      <LoadingSvg className='w-10 h-10' />
-    </div>;
-  } else if (!isAuthenticated) {
-    // If the user is not authenticated, open Auth Dialog to login
-    openAuthDialog(true);
-    return <Navigate to='/' />;
-  }
+  // Handling authentication states
+  const renderContent = () => {
+    switch (status) {
+      case AUTH_STATUS.PENDING:
+        return (
+          <div className='flex items-center justify-center w-full h-full'>
+            <LoadingSvg className='w-10 h-10' />
+          </div>
+        );
 
-  // If the user is authenticated, render the component
-  if (isAuthenticated) {
-    return <Component />;
-  }
+      case AUTH_STATUS.SUCCEEDED:
+        return <Component />;
+
+      default:
+        openAuthDialog(true);
+        return <Navigate to='/' replace />;
+    }
+  };
+
+  return <>{renderContent()}</>;
 };
 
 export default PrivateRoute;
