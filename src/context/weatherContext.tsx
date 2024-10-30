@@ -1,3 +1,4 @@
+import { fetcher } from '@/api/swrConfig';
 import { CURRENT_WEATHER_URL, FIVE_DAY_FORECAST_URL } from '@/api/urls';
 import { DB_COLLECTIONS } from '@/config/config';
 import useAuth from '@/hooks/useAuth';
@@ -8,13 +9,13 @@ import weatherReducer, {
 import { ILocation, ISaveLocation } from '@/types/location';
 import { IForecastData, IWeatherData } from '@/types/weather';
 import { getDocumentsByField } from '@/utils/firestoreService';
-import { sendGetRequest } from '@/utils/sendGetRequest';
 import React, {
   createContext,
   useCallback,
   useEffect,
   useReducer,
 } from 'react';
+import useSWRMutation from 'swr/mutation';
 
 interface IWeatherContext extends IWeatherState {
   location: ILocation | null;
@@ -31,6 +32,21 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({
   const { user } = useAuth();
   const [state, dispatch] = useReducer(weatherReducer, initialWeatherState);
 
+  // useSWRMutation for weather data
+  const { trigger: fetchWeatherTrigger } = useSWRMutation<IWeatherData>(
+    state.location
+      ? CURRENT_WEATHER_URL(state.location?.lat, state.location?.lon)
+      : null,
+    fetcher
+  );
+
+  const { trigger: fetchForecastTrigger } = useSWRMutation<IForecastData>(
+    state.location
+      ? FIVE_DAY_FORECAST_URL(state.location?.lat, state.location?.lon)
+      : null,
+    fetcher
+  );
+
   // Fetch current weather and forecast data
   const fetchWeatherData = useCallback(async () => {
     if (!state.location) return;
@@ -38,22 +54,10 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({
     dispatch({ type: 'FETCH_REQUEST' });
 
     try {
-      // const [weatherData, forecastData] = await Promise.all([
-      //   sendGetRequest<IWeatherData>(
-      //     CURRENT_WEATHER_URL(state.location.lat, state.location.lon)
-      //   ),
-      //   sendGetRequest<IForecastData>(
-      //     FIVE_DAY_FORECAST_URL(state.location.lat, state.location.lon)
-      //   ),
-      // ]);
-
-      const weatherData = await sendGetRequest<IWeatherData>(
-        CURRENT_WEATHER_URL(state.location.lat, state.location.lon)
-      );
+      const weatherData = await fetchWeatherTrigger();
       dispatch({ type: 'FETCH_WEATHER_SUCCESS', payload: weatherData });
-      const forecastData = await sendGetRequest<IForecastData>(
-        FIVE_DAY_FORECAST_URL(state.location.lat, state.location.lon)
-      );
+
+      const forecastData = await fetchForecastTrigger();
       dispatch({ type: 'FETCH_FORECAST_SUCCESS', payload: forecastData });
     } catch (err) {
       console.error('🚀 ~ fetchWeatherData ~ err:', err);
@@ -66,7 +70,7 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({
         payload: 'Failed to fetch forecast data.',
       });
     }
-  }, [state.location]);
+  }, [state.location, fetchWeatherTrigger, fetchForecastTrigger]);
 
   // Fetch saved locations from Firestore
   const fetchSavedLocations = useCallback(async () => {

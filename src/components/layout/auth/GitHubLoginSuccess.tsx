@@ -1,20 +1,32 @@
 import { GET_GITHUB_USER_INFO } from '@/api/urls';
+import api from '@/config/apiConfig';
 import useAuth from '@/hooks/useAuth';
 import { IAuthResponse } from '@/types/auth';
-import { sendAppGetRequest } from '@/utils/sendGetRequest';
 import { useEffect } from 'react';
+import { useSWRConfig } from 'swr';
 
 const GitHubLoginSuccess = () => {
+  const { mutate } = useSWRConfig();
   const { login } = useAuth();
+
   const handelGithubLoginSuccess = async (code: string) => {
     try {
-      const data = await sendAppGetRequest<IAuthResponse>(
-        GET_GITHUB_USER_INFO(code)
+      const data = await mutate<IAuthResponse>(
+        GET_GITHUB_USER_INFO(code),
+        async () => {
+          // Fetch user data with `accessToken` in headers
+          const res = await api.get(GET_GITHUB_USER_INFO(code));
+          return res.data;
+        },
+        { revalidate: false }
       );
 
-      login(data.user, data.token);
+      // Call login function with user data and token if successful
+      if (data) {
+        login(data.user, data.token);
+      }
     } catch (error) {
-      console.log('🚀 ~ useEffect ~ error:', error);
+      console.error('Error fetching Github user info:', error);
     }
   };
 

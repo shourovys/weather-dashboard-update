@@ -1,8 +1,9 @@
-import appApi from '@/config/apiConfig';
+import { fetcher } from '@/api/swrConfig';
+import { AUTH } from '@/api/urls';
+import api from '@/config/apiConfig';
 import { useToast } from '@/hooks/useToasts';
 import authReducer, { initialState } from '@/reducer/authReducer';
 import { AUTH_STATUS, IAuthResponse, IAuthState, IUser } from '@/types/auth';
-import { sendAppGetRequest } from '@/utils/sendGetRequest';
 import React, {
   createContext,
   useCallback,
@@ -11,6 +12,7 @@ import React, {
   useReducer,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useSWRMutation from 'swr/mutation';
 
 // Extend AxiosRequestConfig to include _isRetry
 // interface ICustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -35,6 +37,30 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  const { trigger: fetchMeTrigger } = useSWRMutation<IAuthResponse>(
+    AUTH.ME,
+    fetcher,
+    {
+      onSuccess: (data) => {
+        console.log('🚀 ~ data:', data);
+        dispatch({
+          type: 'LOGIN',
+          payload: data,
+        });
+        localStorage.setItem('token', data.token);
+      },
+      onError: () => {
+        dispatch({ type: 'ERROR' });
+        dispatch({ type: 'LOGOUT' });
+      },
+    }
+  );
+
+  const { trigger: refreshMeTrigger } = useSWRMutation<IAuthResponse>(
+    AUTH.REFRESH_TOKEN,
+    fetcher
+  );
+
   const { toast } = useToast();
 
   // Fetch user details and validate token on initial mount
@@ -43,22 +69,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       type: 'STATUS',
       payload: { status: AUTH_STATUS.PENDING },
     });
-    const fetchMe = async () => {
-      try {
-        const data = await sendAppGetRequest<IAuthResponse>('/user/me');
-        dispatch({
-          type: 'LOGIN',
-          payload: data,
-        });
-        localStorage.setItem('token', data.token);
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-        dispatch({ type: 'ERROR' });
-        dispatch({ type: 'LOGOUT' });
-      }
-    };
 
-    fetchMe();
+    fetchMeTrigger();
   }, []);
 
   // // Request interceptor to add authorization token
@@ -88,15 +100,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       type: 'STATUS',
       payload: { status: AUTH_STATUS.PENDING },
     });
-    const refreshInterceptor = appApi.interceptors.response.use(
+    const refreshInterceptor = api.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
         if (error.response?.status === 401) {
           try {
-            const data = await sendAppGetRequest<IAuthResponse>(
-              '/user/refreshToken'
-            );
+            const data = await refreshMeTrigger();
 
             dispatch({
               type: 'LOGIN',
@@ -108,7 +118,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             originalRequest.headers.Authorization = `Bearer ${data.token}`;
             originalRequest._isRetry = true;
 
-            return appApi(originalRequest); // Retry the original request
+            return api(originalRequest); // Retry the original request
           } catch (error) {
             console.log('🚀 ~ error:', error);
             navigate('/');
@@ -126,7 +136,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
 
     return () => {
-      appApi.interceptors.response.eject(refreshInterceptor); // Cleanup on unmount
+      api.interceptors.response.eject(refreshInterceptor); // Cleanup on unmount
     };
   }, [state.token]);
 

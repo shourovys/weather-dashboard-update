@@ -14,3 +14,8 @@ export const GET_GOOGLE_USER_INFO = (accessToken: string) =>
 
 export const GET_GITHUB_USER_INFO = (code: string) =>
   `/github/userData?code=${code}`;
+
+export const AUTH = {
+  ME: '/user/me',
+  REFRESH_TOKEN: '/user/refreshToken',
+};

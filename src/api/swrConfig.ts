@@ -1,10 +1,11 @@
+import api from '@/config/apiConfig';
 import serverErrorHandler from '@/utils/serverErrorHandler';
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { AxiosError, AxiosRequestConfig } from 'axios';
 import { SWRConfiguration } from 'swr';
 
 // Default fetcher for SWR using Axios
 export const fetcher = async (url: string) => {
-  const res = await axios.get(url);
+  const res = await api.get(url);
   return res.data;
 };
 
@@ -46,7 +47,7 @@ export const swrConfig: SWRConfiguration = {
 
 // Function to send a POST request
 export async function sendPostRequest<T>(url: string, { arg }: { arg: T }) {
-  return axios
+  return api
     .post(url, arg)
     .then((res) => res.data)
     .catch((error) => {
@@ -56,7 +57,7 @@ export async function sendPostRequest<T>(url: string, { arg }: { arg: T }) {
 
 // Function to send a PUT request
 export async function sendPutRequest<T>(url: string, { arg }: { arg: T }) {
-  return axios
+  return api
     .put(url, arg)
     .then((res) => res.data)
     .catch((error) => {
@@ -69,7 +70,7 @@ export async function sendDeleteRequest<T extends AxiosRequestConfig>(
   url: string,
   data?: T['data']
 ) {
-  return axios
+  return api
     .delete(url, { data: data?.arg?.data })
     .then((res) => res.data)
     .catch((error) => {

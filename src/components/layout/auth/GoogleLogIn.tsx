@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GET_GOOGLE_USER_INFO } from '@/api/urls';
 import AuthButton from '@/components/layout/auth/AuthButton';
+import api from '@/config/apiConfig';
 import { GOOGLE_CLIENT_ID } from '@/config/config';
 import useAuth from '@/hooks/useAuth';
 import { IAuthResponse } from '@/types/auth';
-import { sendAppGetRequest } from '@/utils/sendGetRequest';
 import React, { useEffect, useRef } from 'react';
+import { useSWRConfig } from 'swr';
 
 declare global {
   interface Window {
@@ -14,17 +15,29 @@ declare global {
 }
 
 const GoogleLoginButton: React.FC = () => {
+  const { mutate } = useSWRConfig();
   const { login } = useAuth();
   const googleClientRef = useRef<any>(null);
 
   const handleGoogleLoginSuccess = async (accessToken: string) => {
-    // Send the access token to the backend for validation and secure processing.
-    const data = await sendAppGetRequest<IAuthResponse>(
-      GET_GOOGLE_USER_INFO(accessToken)
-    );
+    try {
+      const data = await mutate<IAuthResponse>(
+        GET_GOOGLE_USER_INFO(accessToken),
+        async () => {
+          // Fetch user data with `accessToken` in headers
+          const res = await api.get(GET_GOOGLE_USER_INFO(accessToken));
+          return res.data;
+        },
+        { revalidate: false }
+      );
 
-    // Call login function with user data and token
-    login(data.user, data.token);
+      // Call login function with user data and token if successful
+      if (data) {
+        login(data.user, data.token);
+      }
+    } catch (error) {
+      console.error('Error fetching Google user info:', error);
+    }
   };
 
   const handleGoogleLoginError = () => {
