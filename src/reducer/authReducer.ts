@@ -29,7 +29,7 @@ export const initialState: IAuthState = {
   user: null,
   token: null,
   isAuthenticated: false,
-  status: AUTH_STATUS.IDLE,
+  status: AUTH_STATUS.PENDING,
   isAuthModalOpen: false,
 };
 
@@ -70,13 +70,11 @@ const authReducer = (state: IAuthState, action: IAuthAction): IAuthState => {
         return {
           ...state,
           isAuthModalOpen: true,
-          status: AUTH_STATUS.PENDING,
         };
       } else {
         return {
           ...state,
           isAuthModalOpen: false,
-          status: AUTH_STATUS.IDLE,
         };
       }
     default:

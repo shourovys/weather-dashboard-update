@@ -37,15 +37,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fetcher,
     {
       onSuccess: (data) => {
-        console.log('🚀 ~ data:', data);
         dispatch({
           type: 'LOGIN',
           payload: data,
         });
         localStorage.setItem('token', data.token);
-      },
-      onError: () => {
-        dispatch({ type: 'ERROR' });
       },
     }
   );
@@ -69,11 +65,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Response interceptor to handle token refresh
   useLayoutEffect(() => {
-    dispatch({
-      type: 'STATUS',
-      payload: { status: AUTH_STATUS.PENDING },
-    });
-
     api.interceptors.response.use(
       (response) => response,
       async (error) => {
