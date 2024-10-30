@@ -14,11 +14,6 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import useSWRMutation from 'swr/mutation';
 
-// Extend AxiosRequestConfig to include _isRetry
-// interface ICustomAxiosRequestConfig extends InternalAxiosRequestConfig {
-//   _isRetry?: boolean;
-// }
-
 export interface IAuthContextType extends IAuthState {
   login: (user: IUser, token: string) => void;
   logout: () => void;
@@ -51,7 +46,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       },
       onError: () => {
         dispatch({ type: 'ERROR' });
-        dispatch({ type: 'LOGOUT' });
       },
     }
   );
@@ -73,38 +67,22 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fetchMeTrigger();
   }, []);
 
-  // // Request interceptor to add authorization token
-  // useLayoutEffect(() => {
-  //   const authInterceptor = appApi.interceptors.request.use(
-  //     (config: ICustomAxiosRequestConfig) => {
-  //       // Ensure headers are initialized if undefined
-  //       config.headers = config.headers ?? {};
-
-  //       config.headers.Authorization =
-  //         !config._isRetry && state.token
-  //           ? Bearer ${state.token}
-  //           : config.headers.Authorization;
-
-  //       return config;
-  //     }
-  //   );
-
-  //   return () => {
-  //     appApi.interceptors.request.eject(authInterceptor);
-  //   };
-  // }, [state.token]);
-
   // Response interceptor to handle token refresh
   useLayoutEffect(() => {
     dispatch({
       type: 'STATUS',
       payload: { status: AUTH_STATUS.PENDING },
     });
-    const refreshInterceptor = api.interceptors.response.use(
+
+    api.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
-        if (error.response?.status === 401) {
+
+        if (
+          error.response.status === 401 &&
+          error.response.data.message === 'Unauthorized'
+        ) {
           try {
             const data = await refreshMeTrigger();
 
@@ -116,7 +94,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             localStorage.setItem('token', data.token);
 
             originalRequest.headers.Authorization = `Bearer ${data.token}`;
-            originalRequest._isRetry = true;
 
             return api(originalRequest); // Retry the original request
           } catch (error) {
@@ -134,11 +111,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw error;
       }
     );
-
-    return () => {
-      api.interceptors.response.eject(refreshInterceptor); // Cleanup on unmount
-    };
-  }, [state.token]);
+  }, [state.status]);
 
   // Login function to store token and user data
   const login = useCallback((user: IUser, token: string) => {

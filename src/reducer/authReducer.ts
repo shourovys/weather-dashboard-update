@@ -29,7 +29,7 @@ export const initialState: IAuthState = {
   user: null,
   token: null,
   isAuthenticated: false,
-  status: AUTH_STATUS.PENDING,
+  status: AUTH_STATUS.IDLE,
   isAuthModalOpen: false,
 };
 
